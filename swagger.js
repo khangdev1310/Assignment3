@@ -2,11 +2,11 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'My API',
+    title: 'Khang API',
     description: 'Description',
   },
-  host: 'localhost:4000',
-  schemes: ['http'],
+  host: 'assignment3-api.herokuapp.com/',
+  schemes: ['https'],
 };
 
 const outputFile = './swagger-output.json';
