@@ -3,7 +3,13 @@ const app = express()
 const fs = require('fs')
 const path = require('path')
 const port = 4000
+const cors = require('cors')
 // app.use(express.static(path.join(__dirname, 'public')))
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-output.json');
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(cors())
 app.use(express.json())
 app.use(
   express.urlencoded({
@@ -28,6 +34,15 @@ app.get('/api/products', (req, res) => {
 
 // POST METHOD
 app.post('/api/products', (req, res) => {
+   /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                type: 'object',
+                description: 'Product data'
+        } */
+        const {name, price, type} = req.body;
+  if(!name || !price || !type){
+    return res.status(400).json({ message: 'Required input name, price and type.'})
+  }
   try {
     const dataString = fs.readFileSync(path.join(__dirname, 'data.json'), {
       encoding: 'utf-8',
@@ -78,6 +93,4 @@ app.put('/api/products/:id', (req, res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`Port is listening in http://localhost:${port}`)
-})
+app.listen(process.env.PORT || port)
